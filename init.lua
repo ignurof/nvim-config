@@ -60,7 +60,7 @@ require("lazy").setup({
 	-- Treesitter
 	{ "nvim-treesitter/nvim-treesitter", build = ":TSUpdate" },
 
-	-- LSP
+		-- LSP
 	{
 		"neovim/nvim-lspconfig",
 		opts = {},
