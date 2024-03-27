@@ -19,6 +19,10 @@ vim.g.maplocalleader = " " -- Same for `maplocalleader`
 vim.opt.number = true
 vim.opt.relativenumber = true
 
+vim.opt.expandtab = true
+vim.opt.tabstop = 4
+vim.opt.shiftwidth = 4
+
 -- Set highlight on search, but clear on pressing <Esc> in normal mode
 vim.opt.hlsearch = true
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
