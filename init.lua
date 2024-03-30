@@ -15,7 +15,9 @@ vim.opt.rtp:prepend(lazypath)
 vim.g.mapleader = " " -- Make sure to set `mapleader` before lazy so your mappings are correct
 vim.g.maplocalleader = " " -- Same for `maplocalleader`
 
+-- Keymapping
 vim.keymap.set('n', "<leader>pf", vim.cmd.Ex, { desc = "Explore project files (netrw)" })
+vim.keymap.set('n', "<C-s>", vim.cmd.w, { desc = "Save file" })
 
 -- Line numbers
 vim.opt.number = true
