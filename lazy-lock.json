@@ -1,7 +1,5 @@
 {
   "lazy.nvim": { "branch": "main", "commit": "31ddbea7c10b6920c9077b66c97951ca8682d5c8" },
-  "nvim-lspconfig": { "branch": "master", "commit": "f4619ab31fc4676001ea05ae8200846e6e7700c7" },
-  "nvim-treesitter": { "branch": "master", "commit": "0bfa0be5e4c8f4e70dad81bea1ce0cda2d76ca24" },
   "plenary.nvim": { "branch": "master", "commit": "8aad4396840be7fc42896e3011751b7609ca4119" },
   "rose-pine": { "branch": "main", "commit": "c52167563e6aa44b5fa6fe007faa2bcac71050f0" },
   "telescope.nvim": { "branch": "master", "commit": "6312868392331c9c0f22725041f1ec2bef57c751" },
