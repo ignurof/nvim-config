@@ -82,6 +82,19 @@ require("lazy").setup({
     },
 })
 
+require('nvim-treesitter.configs').setup {
+    highlight = { enable = true, additional_vim_regex_highlighting = false },
+    incremental_selection = {
+        enable = true,
+        keymaps = {
+            init_selection = "gnn", -- set to `false` to disable one of the mappings
+            node_incremental = "grn",
+            scope_incremental = "grc",
+            node_decremental = "grm",
+        }
+    }
+}
+
 require('mason').setup()
 require('mason-lspconfig').setup()
 
@@ -92,3 +105,10 @@ require('lspconfig').lua_ls.setup {
         }
     }
 }
+
+require('lspconfig').basedpyright.setup {}
+
+-- Disable semantic highlighting
+for _, group in ipairs(vim.fn.getcompletion("@lsp", "highlight")) do
+  vim.api.nvim_set_hl(0, group, {})
+end
