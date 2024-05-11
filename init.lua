@@ -78,31 +78,59 @@ require("lazy").setup({
     {
         "williamboman/mason.nvim",
         "williamboman/mason-lspconfig.nvim",
-        "neovim/nvim-lspconfig",
     },
+
+    { 'VonHeikemen/lsp-zero.nvim' , branch = 'v3.x'},
+    { 'neovim/nvim-lspconfig' },
+    { 'hrsh7th/cmp-nvim-lsp' },
+    { 'hrsh7th/nvim-cmp' },
+    { 'L3MON4D3/LuaSnip' },
 })
 
 require('nvim-treesitter.configs').setup {
     highlight = { enable = true, additional_vim_regex_highlighting = false }
 }
 
+local lsp_zero = require('lsp-zero')
+
+-- only do lsp keymaps on active buffer
+lsp_zero.on_attach(function(client, bufnr)
+  -- see :help lsp-zero-keybindings
+  -- to learn the available actions
+  lsp_zero.default_keymaps({buffer = bufnr})
+end)
+
 require('mason').setup()
-require('mason-lspconfig').setup()
+require('mason-lspconfig').setup({
+    ensure_installed = {},
+    handlers = {
+        -- default handlers
+        function(server_name)
+            require('lspconfig')[server_name].setup({})
+        end,
+        -- this is the "custom handler" for `example_server`
+        --- in your own config you should replace `example_server`
+        --- with the name of a language server you have installed
+        lua_ls = function()
+            --- in this function you can setup
+            --- the language server however you want. 
+            --- in this example we just use lspconfig
 
-require('lspconfig').lua_ls.setup {
-    settings = {
-        Lua = {
-            diagnostics = { globals = {'vim'}, }
-        }
-    }
-}
+            require('lspconfig').lua_ls.setup({
+                settings = {
+                    Lua = {
+                        diagnostics = { globals = {'vim'}, }
+                    }
+                }
+            })
+        end,
+    },
+})
 
-require('lspconfig').basedpyright.setup {}
-
--- Disable semantic highlighting
+-- Disable semantic highlighting (conflicting with treesitter)
 vim.api.nvim_create_autocmd("LspAttach", {
-  callback = function(args)
-    local client = vim.lsp.get_client_by_id(args.data.client_id)
-    client.server_capabilities.semanticTokensProvider = nil
-  end,
+    callback = function(args)
+        local client = vim.lsp.get_client_by_id(args.data.client_id)
+        client.server_capabilities.semanticTokensProvider = nil
+    end,
 });
