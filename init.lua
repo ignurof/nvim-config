@@ -12,7 +12,7 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 -- Global mappings.
-vim.g.mapleader = " " -- Make sure to set `mapleader` before lazy so your mappings are correct
+vim.g.mapleader = " "      -- Make sure to set `mapleader` before lazy so your mappings are correct
 vim.g.maplocalleader = " " -- Same for `maplocalleader`
 
 -- Keymapping
@@ -44,7 +44,11 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 
 require("lazy").setup({
     -- Theme
-    { "rose-pine/neovim", name = "rose-pine", priority = 1000 },
+    {
+        "rose-pine/neovim",
+        name = "rose-pine",
+        priority = 1000
+    },
 
     -- Show keymap hints
     {
@@ -62,7 +66,8 @@ require("lazy").setup({
     },
 
     {
-        'nvim-telescope/telescope.nvim', tag = '0.1.6',
+        'nvim-telescope/telescope.nvim',
+        tag = '0.1.6',
         dependencies = { 'nvim-lua/plenary.nvim' },
         config = function()
             local builtin = require("telescope.builtin")
@@ -80,7 +85,7 @@ require("lazy").setup({
         "williamboman/mason-lspconfig.nvim",
     },
 
-    { 'VonHeikemen/lsp-zero.nvim' , branch = 'v3.x'},
+    { 'VonHeikemen/lsp-zero.nvim', branch = 'v3.x' },
     { 'neovim/nvim-lspconfig' },
     { 'hrsh7th/cmp-nvim-lsp' },
     { 'hrsh7th/nvim-cmp' },
@@ -95,10 +100,28 @@ local lsp_zero = require('lsp-zero')
 
 -- only do lsp keymaps on active buffer
 lsp_zero.on_attach(function(client, bufnr)
-  -- see :help lsp-zero-keybindings
-  -- to learn the available actions
-  lsp_zero.default_keymaps({buffer = bufnr})
+    -- see :help lsp-zero-keybindings
+    -- to learn the available actions
+    _ = client
+    lsp_zero.default_keymaps({ buffer = bufnr })
+    local opts = { buffer = bufnr }
+
+    vim.keymap.set('n', 'gq', function()
+        vim.lsp.buf.format({ async = false, timeout_ms = 10000 })
+    end, opts)
 end)
+
+vim.diagnostic.config({
+  signs = false
+})
+
+vim.opt.signcolumn = 'no'
+
+lsp_zero.set_server_config({
+    on_init = function(client)
+        client.server_capabilities.semanticTokensProvider = nil
+    end,
+})
 
 require('mason').setup()
 require('mason-lspconfig').setup({
@@ -113,24 +136,16 @@ require('mason-lspconfig').setup({
         --- with the name of a language server you have installed
         lua_ls = function()
             --- in this function you can setup
-            --- the language server however you want. 
+            --- the language server however you want.
             --- in this example we just use lspconfig
 
             require('lspconfig').lua_ls.setup({
                 settings = {
                     Lua = {
-                        diagnostics = { globals = {'vim'}, }
+                        diagnostics = { globals = { 'vim' }, }
                     }
                 }
             })
         end,
     },
 })
-
--- Disable semantic highlighting (conflicting with treesitter)
-vim.api.nvim_create_autocmd("LspAttach", {
-    callback = function(args)
-        local client = vim.lsp.get_client_by_id(args.data.client_id)
-        client.server_capabilities.semanticTokensProvider = nil
-    end,
-});
