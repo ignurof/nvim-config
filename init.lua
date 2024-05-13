@@ -107,7 +107,7 @@ lsp_zero.on_attach(function(client, bufnr)
     local opts = { buffer = bufnr }
 
     vim.keymap.set('n', 'gq', function()
-        if vim.bo.filetype == 'py' then
+        if vim.bo.filetype == 'python' then
             vim.cmd(":!black " .. vim.api.nvim_buf_get_name(0))
         else
             vim.lsp.buf.format({ async = false, timeout_ms = 10000 })
