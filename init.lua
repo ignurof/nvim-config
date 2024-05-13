@@ -85,7 +85,7 @@ require("lazy").setup({
         "williamboman/mason-lspconfig.nvim",
     },
 
-    { 'VonHeikemen/lsp-zero.nvim', branch = 'v3.x' },
+    { 'VonHeikemen/lsp-zero.nvim',       branch = 'v3.x' },
     { 'neovim/nvim-lspconfig' },
     { 'hrsh7th/cmp-nvim-lsp' },
     { 'hrsh7th/nvim-cmp' },
@@ -107,12 +107,16 @@ lsp_zero.on_attach(function(client, bufnr)
     local opts = { buffer = bufnr }
 
     vim.keymap.set('n', 'gq', function()
-        vim.lsp.buf.format({ async = false, timeout_ms = 10000 })
+        if vim.bo.filetype == 'py' then
+            vim.cmd(":!black " .. vim.api.nvim_buf_get_name(0))
+        else
+            vim.lsp.buf.format({ async = false, timeout_ms = 10000 })
+        end
     end, opts)
 end)
 
 vim.diagnostic.config({
-  signs = false
+    signs = false
 })
 
 vim.opt.signcolumn = 'no'
