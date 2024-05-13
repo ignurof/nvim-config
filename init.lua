@@ -109,6 +109,8 @@ lsp_zero.on_attach(function(client, bufnr)
     vim.keymap.set('n', 'gq', function()
         if vim.bo.filetype == 'python' then
             vim.cmd(":!black " .. vim.api.nvim_buf_get_name(0))
+        elseif vim.bo.filetype == 'htmldjango' then
+            vim.cmd(':!djlint ' .. vim.api.nvim_buf_get_name(0) .. '--profile=django')
         else
             vim.lsp.buf.format({ async = false, timeout_ms = 10000 })
         end
